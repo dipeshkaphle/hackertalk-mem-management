@@ -1,0 +1,13 @@
+.DS_Store
+.idea
+*.log
+tmp/
+_minted-presentation/
+*.html
+*.aux
+*.log
+*.css
+*.nav
+*.toc
+*.vrb
+*.snm
