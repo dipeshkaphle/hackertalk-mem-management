@@ -117,8 +117,6 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{minted}
-\setsansfont[BoldFont={Fira Sans}]{Fira Sans Light}
-\setmonofont{Fira Mono}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -154,7 +152,7 @@ BoldItalicFont={Fira Sans Italic}]%
 \protect\hypertarget{memory-layout}{}
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth,height=\textheight]{memory.png}
+\includegraphics[width=0.5\textwidth,height=\textheight]{images/memory.png}
 \caption{A program's memory segments roughly
 classified}
 \end{figure}
@@ -253,7 +251,7 @@ int main(){
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth,height=\textheight]{stack_layout.png}
+\includegraphics[width=0.5\textwidth,height=\textheight]{images/stack_layout.png}
 \caption{Stack Layout for above code}
 \end{figure}
 \end{frame}
@@ -502,13 +500,13 @@ int main(){
 \begin{column}{0.6\textwidth}
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth,height=\textheight]{mem_management_leak_scenario1.png}
+\includegraphics[width=0.7\textwidth,height=\textheight]{images/mem_management_leak_scenario1.png}
 \caption{Flow for the leaking code}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth,height=\textheight]{./leak_detected.png}
+\includegraphics[width=0.9\textwidth,height=\textheight]{images/./leak_detected.png}
 \caption{Memory Leak Detected by address
 sanitizer}
 \end{figure}
@@ -609,13 +607,13 @@ We're not even freeing anything?? How does this work?
 \protect\hypertarget{what-is-raii-in-c}{}
 \begin{figure}
 \centering
-\includegraphics{raii.png}
+\includegraphics{images/raii.png}
 \caption{RAII}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{./destructor.png}
+\includegraphics{images/./destructor.png}
 \caption{Destructor call added automatically}
 \end{figure}
 \end{block}
@@ -658,7 +656,7 @@ int main(){
 
 \begin{figure}
 \centering
-\includegraphics{./int_ptr_working.png}
+\includegraphics{images/./int_ptr_working.png}
 \caption{int\_ptr working without any leaks}
 \end{figure}
 \end{column}
@@ -713,7 +711,7 @@ Why would I need anything else?}
 
 \begin{figure}
 \centering
-\includegraphics{./fd.png}
+\includegraphics{images/./fd.png}
 \caption{File Descriptor with unique\_ptr(the code
 is very bad🥲)}
 \end{figure}

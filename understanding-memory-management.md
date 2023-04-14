@@ -26,7 +26,7 @@ BoldItalicFont={Fira Sans Italic}]%
 
 ## Memory Layout
 
-![A program's memory segments roughly classified](memory.png){width=50%}
+![A program's memory segments roughly classified](images/memory.png){width=50%}
 
 - In practice, the stack grows towards lower addresses, the heap towards
   higher(the diagram has it the other way around, but that doesn't matter).
@@ -83,7 +83,7 @@ int main(){
 
 \normalsize
 
-![Stack Layout for above code](stack_layout.png){width=50%}
+![Stack Layout for above code](images/stack_layout.png){width=50%}
 
 ## Heap and Heap Allocation
 
@@ -234,9 +234,9 @@ int main(){
 
 :::: {.column width=60%}
 
-![Flow for the leaking code](mem_management_leak_scenario1.png){width=70%}
+![Flow for the leaking code](images/mem_management_leak_scenario1.png){width=70%}
 
-![Memory Leak Detected by address sanitizer](./leak_detected.png){width=90%}
+![Memory Leak Detected by address sanitizer](images/./leak_detected.png){width=90%}
 
 ::::
 
@@ -322,9 +322,9 @@ We're not even freeing anything?? How does this work?
 
 ### What is RAII in C++?
 
-![RAII](raii.png)
+![RAII](images/raii.png)
 
-![Destructor call added automatically](./destructor.png)
+![Destructor call added automatically](images/./destructor.png)
 
 ::::
 
@@ -366,7 +366,7 @@ int main(){
 
 \vspace{30pt}
 
-![int_ptr working without any leaks](./int_ptr_working.png)
+![int_ptr working without any leaks](images/./int_ptr_working.png)
 
 ::::
 
@@ -402,7 +402,7 @@ int main(){
 
 \pause
 
-![File Descriptor with unique_ptr(the code is very bad🥲)](./fd.png)
+![File Descriptor with unique_ptr(the code is very bad🥲)](images/./fd.png)
 
 ::::
 
