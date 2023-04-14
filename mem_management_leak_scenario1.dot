@@ -1,0 +1,16 @@
+digraph {
+    main[label="int main()"]
+    subgraph cluster_allocate_and_throw_exn_if_n_lt_10{
+        label = "int *allocate_and_throw_exn_if_n_lt_10(int n)"
+        condition[label="n<10"]
+        runtime_error[label="throw runtime_error"]
+        ret[label="return arr"]
+        condition -> runtime_error[label="yes"]
+        condition ->  ret[label="no"]
+    }
+    free[label="free(arr)"]
+    leak[label="memory leak 😱"]
+    main ->  condition
+    ret -> free
+    runtime_error -> leak
+}

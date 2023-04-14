@@ -19,4 +19,9 @@ SOURCE_FORMAT="markdown\
 +raw_html\
 +markdown_in_html_blocks"
 
-pandoc --filter pandoc-minted -s --dpi=300 --slide-level 2 --listings --shift-heading-level=0 --pdf-engine=lualatex --columns=50 -f "$SOURCE_FORMAT"   -V lang=en-US -t beamer understanding-memory-management.md -o presentation.tex
+pandoc -s --dpi=300 --slide-level 2 --listings --shift-heading-level=0 --pdf-engine=xelatex --columns=50 -f "$SOURCE_FORMAT"   -V lang=en-US -t beamer understanding-memory-management.md -o presentation.tex
+
+sed -i -E 's/\\begin\{lstlisting\}\[language=C\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere]{c}/g' presentation.tex
+sed -i -E 's/\\begin\{lstlisting\}\[language=\{C\+\+\}\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere]{cpp}/g' presentation.tex
+sed -i -E 's/\\end\{lstlisting\}/\\end{minted}/g' presentation.tex
+xelatex -shell-escape presentation.tex
