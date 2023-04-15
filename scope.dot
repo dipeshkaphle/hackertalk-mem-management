@@ -1,0 +1,16 @@
+digraph G{
+  scope1 [label="scope '1"]
+  scope2 [label="scope '2"]
+  scope3 [label="scope '3"]
+  scope4 [label="scope '4"]
+  scope5 [label="scope '5"]
+
+scope1 -> scope2 [dir=back]
+
+scope2 -> scope3[dir=back]
+
+scope1 -> scope4[dir=back]
+
+scope1 -> scope5[dir=back]
+
+}

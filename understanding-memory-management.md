@@ -19,14 +19,26 @@ header-includes: |
   \usepackage{minted}
 ---
 
-\setsansfont[ItalicFont={Fira Sans Light Italic},%
-BoldFont={Fira Sans SemiBold},%
-BoldItalicFont={Fira Sans Italic}]%
-{Fira Sans Light}%
+# Prerequisites
 
 ## Memory Layout
 
-![A program's memory segments roughly classified](images/memory.png){width=50%}
+::: columns
+
+:::: {.column width=10%}
+
+::::
+
+:::: {.column width=90%}
+\pause
+
+![A rough classification of program's memory segments](images/memory.png){width=100%}
+
+::::
+
+:::
+
+\pause
 
 - In practice, the stack grows towards lower addresses, the heap towards
   higher(the diagram has it the other way around, but that doesn't matter).
@@ -34,11 +46,6 @@ BoldItalicFont={Fira Sans Italic}]%
 \pause
 
 - What are all these things ??
-
-\pause
-
-- We are mainly concerned withe the stack and the heap for the purpose of this
-  talk, but we'll see what the other things are as well.
 
 ## Code and Static segments
 
@@ -50,8 +57,6 @@ BoldItalicFont={Fira Sans Italic}]%
 
 \pause
 
-\scriptsize
-
 ```c
 const char* s = "Lorem Ipsum something something";
 int main(){
@@ -60,32 +65,50 @@ int main(){
 }
 ```
 
-\normalsize
-
 All the strings used in the above code segment are stored in static section,
 while the instructions generated for the program will be in code section.
 
 ## Stack and Stack Allocation
 
+\pause
+
 - The stack will store things such as local variables, return address from a
   function call, etc.
 
-\scriptsize
+## Stack and Stack Allocation(continued)
+
+::: columns
+
+:::: {.column width=40%}
+
+\vspace{30pt}
 
 ```c
 int main(){
-  int a = 10; // This is doing stack allocation
+// All of this is
+// doing stack allocation
+  int a = 10;
   int b = 20;
   int arr[2] = {1,2};
   return 0;
 }
 ```
 
-\normalsize
+::::
 
-![Stack Layout for above code](images/stack_layout.png){width=50%}
+:::: {.column width=60%}
+
+\pause
+
+![Stack Layout for above code](images/stack_layout.png)
+
+::::
+
+:::
 
 ## Heap and Heap Allocation
+
+\pause
 
 - Many programming languages allow the programmer to allocate and deallocate
   data under program control.
@@ -96,16 +119,16 @@ int main(){
 
 \pause
 
-- C/C++ has \texttt{malloc/realloc/free} functions for doing heap memory management.
-
-\pause
-
 - Unavoidable when we want to allocate memory whose size is known only when
   the program is running(dynamic allocation).
 
 \pause
 
-\scriptsize
+- C/C++ has \texttt{malloc/realloc/free} functions for doing heap memory management.
+
+\pause
+
+\footnotesize
 
 ```c
 int* f(int n){
@@ -123,7 +146,7 @@ int main(){
 
 ## What exactly are malloc/realloc/free?
 
-Heap allocation functions:
+\pause
 
 - \texttt{\textcolor{red}{malloc(x)} }: allocate `x` bytes in heap
 
@@ -137,11 +160,9 @@ Heap allocation functions:
 
 # Introduction to Memory Management
 
-- Memory management is all about using \texttt{heap memory} correctly.
-
 \pause
 
-- If it's done incorrectly, the program can \textcolor{red}{crash } or \textcolor{red}{slow down}.
+- Memory management is all about using \texttt{heap memory} correctly.
 
 \pause
 
@@ -149,16 +170,29 @@ Heap allocation functions:
 
 \pause
 
+- If it's done incorrectly, the program can \textcolor{red}{crash} or \textcolor{red}{slow down}.
+
+\pause
+
 - There are different techniques for managing heap memory.
-
-### Important terminology
-
-- \textbf{\textcolor{red}{Memory Leak}}: It happens when you ask the operating system for memory but
-  don't return it back.
 
 ## What is this scope thing??
 
-\scriptsize
+\pause
+
+\centering Easier to understand with an example
+
+\pause
+
+::: columns
+
+:::: {.column width=10%}
+
+::::
+
+:::: {.column width=90%}
+
+\footnotesize
 
 ```cpp
 // NOTE: This function won't compile
@@ -166,17 +200,34 @@ int f(){ // scope '1 starts
     int a = 10;
     { // scope '2 starts
        int b = 20;
+       { // scope '3 stars
+           int c = 50;
+       } // scope '3 ends
     } // scope '2 ends
-    if(a == 10){ // scope '3 starts
+
+    if(a == 10){ // scope '4 starts
       int c = 30;
-    } // scope '3 ends
+    } // scope '4 ends
+    else { // scope '5 starts
+       int c = 90;
+    } // scope '5 ends
     return b; // This fails because it's not in scope
 } // scope '1 ends
 ```
 
 \normalsize
 
+::::
+
+:::
+
+## What is this scope thing?? (continued)
+
+![Pictorial representation of scope heirarchy](images/scope.png)
+
 ## Why should I care about freeing memory? Is it really a problem?
+
+\pause
 
 - If your system has infinite memory, you don't need to worry. However, since memory is finite, you must take care.
   \pause
@@ -184,7 +235,14 @@ int f(){ // scope '1 starts
   \pause
 - Your program may \textcolor{red}{crash} if it requests more memory than the operating system can provide.
   \pause
-- Memory leaks can have a significant impact on long-running programs such as \texttt{web servers, editors, and IDEs}.
+- \textcolor{red}{Memory leaks} can have a significant impact on long-running programs such as \texttt{web servers, editors, and IDEs}.
+
+\pause
+
+### Important terminology
+
+- \textbf{\textcolor{red}{Memory Leak}}: It happens when you ask the operating system for memory but
+  don't return it back.
 
 # Ways to manage memory
 
@@ -193,6 +251,8 @@ We have two ways to do memory management.
 \pause
 
 - **Manual Memory Management** : Languages such as C, C++, Rust, etc have this
+
+\pause
 
 - **Automatic Memory Management**: Languages such as Python, Java, Go,
   JavaScript, Swift, etc have this.
@@ -203,15 +263,14 @@ We have two ways to do memory management.
 
 ::: columns
 
-:::: {.column width=40%}
+:::: column
 
-\vspace{30pt}
-\tiny
+\scriptsize
 
 ```cpp
 // NOTE: this is a dumb example to show where things can go wrong,
 // I don't actually write code like this
-int* allocate_and_throw_exn_if_n_lt_10(int n){
+int* allocate_and_throw_exn(int n){
    int *arr = malloc(n*sizeof(int));
    if (n < 10){
        throw runtime_error("n < 10");
@@ -220,7 +279,7 @@ int* allocate_and_throw_exn_if_n_lt_10(int n){
 }
 int main(){
     try {
-        auto *arr = allocate_and_throw_exn_if_n_lt_10(2);
+        auto *arr = allocate_and_throw_exn(2);
         free(arr);
     } catch(const std::runtime_error &e){
         cout << "Error:" <<e.what() << endl;
@@ -232,35 +291,48 @@ int main(){
 
 ::::
 
-:::: {.column width=60%}
+:::: column
 
-![Flow for the leaking code](images/mem_management_leak_scenario1.png){width=70%}
+\vspace{30pt}
 
-![Memory Leak Detected by address sanitizer](images/./leak_detected.png){width=90%}
+\pause
+
+![Flow for the leaking code](images/mem_management_leak_scenario1.png){width=115%}
 
 ::::
 
 :::
 
+## Scenarios where you can go wrong
+
+![Memory Leak Detected by address sanitizer](images/./leak_detected.png){width=100%}
+
 ## How to fix it??
+
+\pause
 
 - \textcolor{red}{DON'T WRITE DUMB CODE LIKE I DID}
 
+\pause
+
 - More high level language(than C) like C++, Rust provide us with smart ways to manage memory
+
+\pause
 
 - They come built-in with smart pointer types like \texttt{unique\textunderscore ptr} (C++)
 
 ## Fixing the code with smart pointer
 
-\scriptsize
-
 ::: columns
 
 :::: column
 
+\scriptsize
+
 ```cpp
-std::unique_ptr<int[]> allocate_and_throw_exn_if_n_lt_10(int n){
-   auto *arr = make_unique<int[]>(new int[n]);
+# \textcolor{red}{LEAKING CODE}
+int* allocate_and_throw_exn(int n){
+   int *arr = malloc(n*sizeof(int));
    if (n < 10){
        throw runtime_error("n < 10");
    }
@@ -268,7 +340,8 @@ std::unique_ptr<int[]> allocate_and_throw_exn_if_n_lt_10(int n){
 }
 int main(){
     try {
-        auto arr = allocate_and_throw_exn_if_n_lt_10(2);
+        auto *arr = allocate_and_throw_exn(2);
+        free(arr);
     } catch(const std::runtime_error &e){
         cout << "Error:" <<e.what() << endl;
     }
@@ -283,54 +356,60 @@ int main(){
 
 :::: column
 
-\vspace{90pt}
+\scriptsize
 
-\begin{center}
-
-\large
-\textbf{\textcolor{red}{What the hell just happened??}}
+```cpp
+# \textcolor{red}{FIXED CODE}
+std::unique_ptr<int[]> allocate_and_throw_exn(int n){
+   auto arr = std::unique_ptr<int[]>(new int[n]);
+   if (n < 10){
+       throw runtime_error("n < 10");
+   }
+   return arr;
+}
+int main(){
+    try {
+        auto arr = allocate_and_throw_exn(2);
+    } catch(const std::runtime_error &e){
+        cout << "Error:" <<e.what() << endl;
+    }
+}
+```
 
 \normalsize
-
-We're not even freeing anything?? How does this work?
-
-\end{center}
-
 ::::
 
 :::
 
+\pause
+\begin{center}
+
+\textbf{\textcolor{red}{What the hell just happened??}}
+\end{center}
+
 ## How do smart pointers work?
 
-::: columns
-
-:::: { .column width=30%}
-
-\vspace{20pt}
+\pause
 
 - Uses **scope** to track lifetime of a pointer(scopes mentioned in [previous section](#what-is-this-scope-thing))
 
 \pause
 
-- C++ uses \texttt{destructors} to run code when an object goes out of scope. (due to RAII in C++)
+- C++ uses \texttt{destructors} to run code when an object goes out of scope. (due to \textcolor{red}{RAII} in C++)
 
-\pause
-
-::::
-
-:::: { .column width=70%}
+## How do smart pointers work? (continued)
 
 ### What is RAII in C++?
 
 ![RAII](images/raii.png)
 
+## Destructors In Action
+
 ![Destructor call added automatically](images/./destructor.png)
 
-::::
-
-:::
-
 ## Let's make our own unique_ptr
+
+\pause
 
 ::: columns
 
@@ -374,19 +453,18 @@ int main(){
 
 ## Is unique_ptr the only smart pointer??
 
+\pause
 \huge
 \centering\textbf{\textcolor{red}{ NO }}
 \normalsize
 
 ## Isn't unique_ptr perfect already? Why would I need anything else?
 
+\pause
+
 - Problem with \texttt{unique\textunderscore ptr} is that it can have only one owner.
 
 \pause
-
-::: columns
-
-:::: { .column width=30%}
 
 ### Case in Point
 
@@ -396,44 +474,324 @@ int main(){
 
 - A file descriptor can have multiple owners. It should only be freed when all the owners go out of scope.
 
-::::
-
-:::: { .column width=70%}
+## File Descriptors Example and what's the problem
 
 \pause
 
-![File Descriptor with unique_ptr(the code is very bad🥲)](images/./fd.png)
+\centering \textcolor{red}{DISCLAIMER:} The code that I'm about to show is cursed
+and no one should model a file descriptor like this
+
+\pause
+
+\centering But, we'll do it still(for the purpose of this talk)
+
+## File Descriptors (continued)
+
+\pause
+
+![File Descriptor with unique_ptr](images/./fd.png){width=90%}
+
+\pause
+
+\vspace{-10pt}
+
+\centering {\textcolor{red}{\textbf{Not possible to model this correctly }}}
+
+## Another classic example (why only unique_ptr isn't enough?)
+
+- \textcolor{red}{SPMC(Single Producer Multiple Consumer) } and \textcolor{red}{MPMC(Multiple Producer Multiple Consumer)} problem
+
+\pause
+
+![MPMC queue](images/mpmc.png){width=80%}
+
+\pause
+
+- Requires multiple owners for producer end as well as the consumer end
+
+# Introduction to Automatic Memory Management
+
+\pause
+
+- The programming language you're using is responsible for memory management.
+  The language runtime handles everything.
+
+\pause
+
+- Programmer doesn't have the mental burden of dealing with memory.
+
+\pause
+
+- All the allocation/deallocation calls are hidden from the programmer.
+
+\pause
+
+### \centering IMPORTANT TERMINOLOGY
+
+\pause
+
+\begin{center}
+\textcolor{red}{Data that cannot be referenced is generally known as \textbf{garbage}}
+\end{center}
+\pause
+
+### \centering Two techniques used primarily
+
+\pause
+
+- We catch the transitions as \texttt{reachable}(in-scope) objects turn \texttt{unreachable}(out-of-scope). \pause Example: \textcolor{red}{Reference Counting} based memory management in Python, Swift,etc., C++ shared_ptr, Rust's Rc and Arc types
+
+\pause
+
+- We periodically locate all the \texttt{reachable} objects and then infer that all the other objects are \texttt{unreachable}. \pause Example: \textcolor{red}{Trace Based Garbage Collection} such as mark and sweep garbage collector used in language like Java, JavaScript, etc.
+
+# Reference Counting
+
+\pause
+
+- All the transitions from reachable to unreachable are caught immediately.
+  \pause
+
+### Backed by simple rules
+
+\pause
+
+- Every allocated pointer has a \textcolor{red}{reference count} associated with it
+  \pause
+- Every copy leads to reference count increment.
+  \pause
+- Every time a reference of the pointer goes out of scope, reference count is decremented by $1$.
+  \pause
+- When the reference count goes to $0$, it is safe to \texttt{free} the object.
+
+## C++'s shared_ptr type
+
+\pause
+
+- It is a \texttt{reference-counted pointer}, manages the \texttt{reference count} elegantly with assignment operator overload, copy constructor overload, destructors, etc.
+
+## Let's solve our file descriptor issue
+
+\pause
+
+![File Descriptor with shared_pointer](images/fd_with_rc.png){width=85%}
+
+# Trace Based Garbage Collection
+
+\pause
+
+- Periodically locates all the \texttt{reachable} objects and then infers that all the other objects are \texttt{unreachable}
+
+\pause
+
+- A pointer is reachable $\textcolor{red}{\Rightarrow }$ There's a root somewhere(in stack, register, static, etc.) from where we can transitively access the pointer.
+
+## What's a root?
+
+\pause
+
+Think of them as root nodes of a graph, something that you have direct access to.
+
+\pause
+
+A \texttt{GC} will treat all the stack variables, registers, static section, as roots.
+
+\text
+
+::: columns
+
+:::: column
+
+\pause
+
+\scriptsize
+
+```ocaml
+type baz = {
+    x: int;
+    y: int
+}
+type bar = {
+    a:  int;
+    b:  baz
+}
+type foo = {
+    field1 : bar;
+    field2: int
+}
+let foo_instance: foo = {
+    field1 = {
+        a  = 10;
+        b = { x= 2 ;y= 5; };
+    };
+    field2= 5;
+}
+```
+
+\normalsize
+
+::::
+
+:::: column
+
+\pause
+![foo_instance variable as a graph](images/object_graph.png){width=80%}
 
 ::::
 
 :::
 
-\pause
-
-\centering {\textbf{Not possible to model this correctly }}
+## Root finding
 
 \pause
 
-\centering {\textbf{That's why we need more }}
+- \textcolor{red}{It involves many intricate details, which took me quite a while to understand.}
 
-# Introduction to Automatic Memory Management
+\pause
 
-# Reference Counting
+- You'd probably want to design a \texttt{precise-collector} if you're building your own language.
+  \pause \textcolor{red}{Precise Collector} is when GC knows about root objects: where they’re placed
+  on stack,their size,lifetime etc. \pause Most popular language runtimes use precise garbage collectors:
+  Python, PyPy, JVM(Java), .NET(C#), Lua, V8(JavaScript) ,SpiderMonkey(JavaScript) and a lot of others.
 
-# Trace Based Collection
+\pause
 
-# Which is better?(Automatic Memory Management or Manual Management
+- Conservative collection does not know about types of traced GC objects. \pause It'll assume
+  everything that's present in the stack, static and register are pointers and it'll follow it. \pause They are inherently unsafe. \pause Example: Boehm-Demers-Weiser conservative C/C++ Garbage Collector
 
-# Advanced Topics in Garbage Collection
+## Tracing GC Algorithms
+
+\pause
+
+All trace-based algorithms compute the set of reachable objects and then take
+the complement of this set. Memory is therefore recycled as follows:
+
+\pause
+
+1. The program or mutator runs and makes allocation requests.
+   \pause
+2. The garbage collector discovers reachability by tracing.
+   \pause
+3. The garbage collector reclaims the storage for unreachable objects.
+
+\pause
+
+### \centering Tracing Based GC Algorithms
+
+\pause
+
+- Copying Collector
+
+- Mark and Sweep Collector
+
+## Copying Collector
+
+\pause
+
+- \textcolor{red}{Copying Collector} partitions memory into two semispaces, A and B.
+  \pause
+- All the allocations are performed in one semispace until it fills up.
+  \pause
+- The garbage collector then copies reachable objects to the other space.
+  \pause
+- Roles of the semispaces are reversed when garbage collection is complete.
+  \pause
+- While all this is happening, the whole program is stopped. (This is why it's called a stop-the-world algorithm)
+
+## Copying Collector (A visual representation)
+
+\pause
+
+::: columns
+
+:::: column
+
+![Before GC](images/copying_collector_before.png){width=100%}
+
+::::
+
+\pause
+
+:::: column
+
+![After GC](images/copying_collector_after.png){width=100%}
+
+::::
+
+:::
+
+## Mark and Sweep
+
+\pause
+
+\centering \textbf{\textcolor{red}{Some terminology first}}
+
+\pause
+
+In a \texttt{mark-and-sweep} gc, An object may be in one of the 4 states: Free(Blue), Unreached(White), Unscanned(Gray), Scanned(Black)
+
+\pause
+
+It is also a stop-the-world algorithm.
+
+\pause \textcolor{red}{Mark} \rightarrow responsible for marking reachable objects \texttt{Black}
+
+\pause \textcolor{red}{Sweep} \rightarrow responsible for freeing all the unreachable( \texttt{White} ) objects.
+
+## Mark and Sweep(continued)
+
+![Basic Mark and Sweep](images/mark_and_sweep.png)
+
+# Which is better ? (Automatic Memory Management or Manual Management)
+
+\pause
+
+\huge
+\centering \textbf{\textcolor{red}{DEPENDS}}
+\normalsize
+
+## Case against Manual Memory Management
+
+![Segmentation Faults](images/seg_fault.png)
+
+## Case against Manual Memory Management(continued)
+
+![Use After Free](images/chrome.png)
+
+## Case against Automatic Memory Management
+
+![Discord Troubles(from a recent Discord Engineering Blog)](images/discord_troubles.png)
+
+\pause
+
+- Similar GC issues encountered by many tech giants
+
+# Advanced Topics in Memory Management
+
+\pause
+
+- Advanced type system like in Rust, which help with memory safety
+
+\pause
 
 - Incremental GC
 
+\pause
+
 - Parallel and Concurrent GC
 
-- Precise and Conservative Garbage Collectors
+\pause
 
-- Reducing GC pause\*
+- Generational GC
+
+\pause
+
+- Reducing GC pauses
 
 # References
 
-- [Some presentation on GC, Grinnel college](https://rebelsky.cs.grinnell.edu/Courses/CS302/99S/Presentations/GC/)
+- [https://rebelsky.cs.grinnell.edu/Courses/CS302/99S/Presentations/GC/](https://rebelsky.cs.grinnell.edu/Courses/CS302/99S/Presentations/GC/)
+- [https://discord.com/blog/how-discord-stores-trillions-of-messages](https://discord.com/blog/how-discord-stores-trillions-of-messages)
+- [https://gchandbook.org/](https://gchandbook.org/)
+- Compilers: Principles, Techniques, and Tools by Alfred V. Aho, Monica S. Lam, Ravi Sethi, and Jeffrey D. Ullman
+- [cppreference](https://en.cppreference.com/w/)

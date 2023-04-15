@@ -1,0 +1,18 @@
+digraph {
+       foo[label="type:foo|root variable"]
+       field1[label="type:bar"]
+       field2[label="type:int"]
+       a[label="type:int"]
+       b[label="type:baz"]
+       x[label="type:int"]
+       y[label="type:int"]
+
+foo -> field1[label="field1"]
+foo -> field2[label="field2"]
+
+field1 -> a[label="a"]
+field1 -> b[label="b"]
+
+b -> x[label="x"]
+b -> y[label="y"]
+}

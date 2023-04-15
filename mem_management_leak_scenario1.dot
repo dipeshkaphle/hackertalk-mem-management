@@ -1,7 +1,7 @@
 digraph {
     main[label="int main()"]
     subgraph cluster_allocate_and_throw_exn_if_n_lt_10{
-        label = "int *allocate_and_throw_exn_if_n_lt_10(int n)"
+        label = "int *allocate_and_throw_exn(int n)"
         condition[label="n<10"]
         runtime_error[label="throw runtime_error"]
         ret[label="return arr"]

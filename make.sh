@@ -21,7 +21,8 @@ SOURCE_FORMAT="markdown\
 
 pandoc -s --dpi=300 --slide-level 2 --listings --shift-heading-level=0 --pdf-engine=xelatex --columns=50 -f "$SOURCE_FORMAT"   -V lang=en-US -t beamer understanding-memory-management.md -o presentation.tex
 
-sed -i -E 's/\\begin\{lstlisting\}\[language=C\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere]{c}/g' presentation.tex
-sed -i -E 's/\\begin\{lstlisting\}\[language=\{C\+\+\}\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere]{cpp}/g' presentation.tex
+sed -i -E 's/\\begin\{lstlisting\}\[language=C\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere,texcomments,escapeinside=||]{c}/g' presentation.tex
+sed -i -E 's/\\begin\{lstlisting\}\[language=\{C\+\+\}\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere,texcomments,escapeinside=||]{cpp}/g' presentation.tex
+sed -i -E 's/\\begin\{lstlisting\}\[language=Caml\]/\\begin{minted}[linenos,mathescape,breaklines,breakanywhere,texcomments,escapeinside=||]{ocaml}/g' presentation.tex
 sed -i -E 's/\\end\{lstlisting\}/\\end{minted}/g' presentation.tex
 xelatex -shell-escape presentation.tex
